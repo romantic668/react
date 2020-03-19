@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header'
+import Bugs from './components/Bugs'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab : 0
+    };
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+  handleSelect(index){
+    console.log(index)
+    this.setState({
+      activeTab: index
+    });
+  }
+
+  render(){
+    
+    return (
+      <div className="App">
+        <Header handleSelect={this.handleSelect}/>
+        <Bugs activeTab={this.state.activeTab}/>
+      </div>
+    );
+  }
 }
+  
 
 export default App;
