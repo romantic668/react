@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import Bug from './Bug'
+import Bugs from './Bugs'
 import {  Button } from 'react-bootstrap';
 import MyModal from'./MyModal'
 
@@ -25,9 +25,8 @@ export default function Profile(props) {
             <h2 className="display-4">Issues Assigned To You</h2>
             <div className="container">
                 <div className="row">
-                    <Bug />
-                    <Bug />
-                    <Bug />
+                    <Bugs activeTab={props.activeTab}/>
+                   
 
                 </div>
             </div>

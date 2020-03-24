@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import Profile from './Profile'
-import Bug from'./Bug'
+import Bugs from'./Bugs'
 import {Button, ButtonGroup} from 'react-bootstrap'
+import {SHOW_COMPLETE, SHOW_IN_PROGRESS} from '../actions/types';
+import { connect } from 'react-redux';
 
-export default class Body extends Component {
+
+
+class Body extends Component {
     render() {
         return (
             <div>
@@ -11,18 +15,17 @@ export default class Body extends Component {
                     this.props.activeTab ? 
                     <div id='bugs' className="container">
                         <ButtonGroup size="lg">
-                            <Button>In Progress</Button>
-                            <Button>Done</Button>
+                            <Button onClick={this.props.showProgress}>In Progress</Button>
+                            <Button onClick={this.props.showComplete}>Completed</Button>
                         </ButtonGroup>
                        
                         <div className="row">
-                            <Bug />
-                            <Bug />
-                            <Bug />
+                            <Bugs activeTab={this.props.activeTab} completed={this.props.completed}/>
+                           
                         </div>
                     </div>
              :
-                    <Profile />
+                    <Profile activeTab={this.props.activeTab}/>
                     
                 }
 
@@ -31,3 +34,19 @@ export default class Body extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    completed: state.bugs.completed
+})
+
+const mapDispatchToProps = dispatch => ({
+    showComplete: () => dispatch({type: SHOW_COMPLETE}),
+    showProgress: () => dispatch({type: SHOW_IN_PROGRESS}),
+
+
+})
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Body);
+
