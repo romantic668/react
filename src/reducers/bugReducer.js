@@ -13,6 +13,11 @@ export default function(state = initialState, action) {
                 ...state,
                 items: action.payload
             };
+        case NEW_BUG:
+            return{
+                ...state,
+                item: action.payload
+            }
         case SHOW_COMPLETE:
             return {
                 ...state,

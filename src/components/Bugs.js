@@ -4,13 +4,26 @@ import { fetchBugs } from '../actions/bugActions'
 
 class Bugs extends React.Component {
 
+    constructor(props){
+        super(props);
+    }
+
     componentDidMount(){
         this.props.fetchBugs();
     }
 
+    componentDidUpdate(prevProps){
+        console.log(this.props.bugs)
+        console.log(prevProps.bugs)
+
+        if (JSON.stringify(this.props.bugs) !== JSON.stringify(prevProps.bugs)) {
+            this.props.fetchBugs();
+        }
+    }
+
     render(){
 
-        let bugItems = this.props.bugs.map(bug => {
+        let bugItems = this.props.bugs.items.map(bug => {
             let color = "col-md-4 card bg-danger" 
             if(bug.priority==='COMMON')
                 color = "col-md-4 card bg-warning" 
@@ -33,7 +46,7 @@ class Bugs extends React.Component {
         )})
 
         if(this.props.activeTab){
-            bugItems = this.props.bugs.filter(bug => bug.finished === this.props.completed).map(bug => {
+            bugItems = this.props.bugs.items.filter(bug => bug.finished === this.props.completed).map(bug => {
                 let color = "col-md-4 card bg-danger" 
                 if(bug.priority==='COMMON')
                     color = "col-md-4 card bg-warning" 
@@ -72,7 +85,7 @@ class Bugs extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    bugs: state.bugs.items
+    bugs: state.bugs
 })
 
 

@@ -11,7 +11,7 @@ router.route('/').post((req, res) => {
     const title = req.body.title;
     const description = req.body.description;
     const priority = req.body.priority;
-    const finished = req.body.finished;
+    // const finished = req.body.finished;
 
 
 
@@ -19,7 +19,7 @@ router.route('/').post((req, res) => {
         title,
         description,
         priority,
-        finished,
+        // finished,
 
     
     
