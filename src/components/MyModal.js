@@ -3,6 +3,9 @@ import { InputGroup, Modal, FormControl, Button, Form} from 'react-bootstrap';
 
 
 export default function MyModal(props) {
+    const userItems = props.users.map((user) =>
+      <option key={user._id}>{user.username}</option>
+    );
     return (
       <Modal
         {...props}
@@ -51,9 +54,8 @@ export default function MyModal(props) {
             <h4>
               <Form.Label>Assign it to</Form.Label>
                 <Form.Control as="select" size="lg" >
-                  <option>user</option>
-                  <option>user</option>
-                  <option>user</option>
+                  {userItems}
+
                   
                 </Form.Control>
             </h4>

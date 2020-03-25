@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var bugSchema = new Schema({
-    
+    username: { type: Schema.Types.ObjectId, ref: 'User' },
     title:{ type: String, required: true},
     description: { type: String, required: true},
     priority:   {   type: String,

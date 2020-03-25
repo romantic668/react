@@ -4,10 +4,17 @@ import Bugs from'./Bugs'
 import {Button, ButtonGroup} from 'react-bootstrap'
 import {SHOW_COMPLETE, SHOW_IN_PROGRESS} from '../actions/types';
 import { connect } from 'react-redux';
+import { fetchUsers } from '../actions/userActions'
+
 
 
 
 class Body extends Component {
+    componentDidMount(){
+        this.props.fetchUsers();
+        console.log(this.props.users)
+    }
+
     render() {
         return (
             <div>
@@ -25,7 +32,7 @@ class Body extends Component {
                         </div>
                     </div>
              :
-                    <Profile activeTab={this.props.activeTab}/>
+                    <Profile users={this.props.users} activeTab={this.props.activeTab}/>
                     
                 }
 
@@ -36,17 +43,20 @@ class Body extends Component {
 }
 
 const mapStateToProps = state => ({
-    completed: state.bugs.completed
+    completed: state.bugs.completed,
+    users: state.users.users
+
 })
 
 const mapDispatchToProps = dispatch => ({
     showComplete: () => dispatch({type: SHOW_COMPLETE}),
     showProgress: () => dispatch({type: SHOW_IN_PROGRESS}),
+    fetchUsers: () => dispatch(fetchUsers())
 
 
 })
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Body);
+export default connect(mapStateToProps, mapDispatchToProps )(Body);
 

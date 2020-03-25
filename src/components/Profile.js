@@ -31,6 +31,7 @@ export default function Profile(props) {
                 </div>
             </div>
             <MyModal
+                users={props.users}
                 show={show}
                 onHide={() => setShow(false)}
             />
