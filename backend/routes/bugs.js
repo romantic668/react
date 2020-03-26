@@ -49,7 +49,23 @@ router.route('/:id').put((req, res) => {
             bug.title = req.body.title;
             bug.description = req.body.description;
             bug.priority = req.body.priority;
-            bug.finished = req.body.finished;
+            bug.deadline = req.body.deadline;
+
+            bug.save()
+            .then(bug => res.json(bug))
+            .catch(err => res.status(400).json('Error: ' + err));
+
+            
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+
+});
+
+router.route('/finish/:id').put((req, res) => {
+    Bug.findById(req.params.id)
+        .then(bug =>{
+            
+            bug.finished = true;
 
             bug.save()
             .then(bug => res.json(bug))

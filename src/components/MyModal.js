@@ -142,7 +142,7 @@ class MyModal extends Component {
               
               
             </div>
-            
+            {this.props.editmode ? null :
             <h4>
               <Form.Label>Assign it to</Form.Label>
                 <Form.Control required as="select" size="lg"
@@ -156,11 +156,13 @@ class MyModal extends Component {
                   
                 </Form.Control>
             </h4>
+
+            }
             
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.props.onHide}>Close</Button>
-            <Button variant="primary" type="submit" >Save</Button> 
+            <Button variant="primary" type="submit" >{this.props.editmode ? "Edit" : "Save"}</Button> 
           </Modal.Footer>
           </Form>
       </Modal>
@@ -169,7 +171,11 @@ class MyModal extends Component {
 
 }
 
+const mapStateToProps = state => ({
+  editbug: state.bugs.editbug,
+  editmode: state.bugs.editmode,
+  users: state.users.users
+})
 
 
-
-  export default connect (null, {createBug})(MyModal)
+  export default connect (mapStateToProps, {createBug})(MyModal)

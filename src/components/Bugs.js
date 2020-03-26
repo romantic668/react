@@ -1,11 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { fetchBugs } from '../actions/bugActions'
+import MyModal from'./MyModal'
+import { EDIT_MODE } from '../actions/types';
+
+
+
 
 class Bugs extends React.Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            show: false
+        }
+        this.handleShow = this.handleShow.bind(this);
     }
 
     componentDidMount(){
@@ -21,6 +30,13 @@ class Bugs extends React.Component {
         }
     }
 
+    handleShow(bool){
+        this.props.enbaleEditMode();
+        this.setState({
+            show: bool
+        })
+    }
+
     render(){
 
         let bugItems = this.props.bugs.items.map(bug => {
@@ -32,7 +48,12 @@ class Bugs extends React.Component {
             
             return (
             <div className={color} key={bug._id}>
-                <div className="card-header">{bug.title}</div>
+                <div className="card-header">{bug.title}
+                    <button type="button" className="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                
+                </div>
                 <div className="card-body d-flex flex-column">
                     <h4 className="card-title">{bug.priority}</h4>
                     {bug.finished ? <h4 className="card-title">Completed</h4> : <h4 className="card-title">In Progress</h4>}
@@ -41,7 +62,7 @@ class Bugs extends React.Component {
                     {bug.deadline && <h4>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h4>}
                     
                     <div className="mt-auto">
-                        {!bug.finished &&<button type="button" className="btn btn-info btn-lg">Edit</button>}<br/>
+                        {!bug.finished &&<button type="button" onClick={() => this.handleShow(true)} className="btn btn-info btn-lg">Edit</button>}<br/>
                         {!bug.finished && <button type="button" className="btn btn-info btn-lg">Finish</button>}
                     </div>
                     
@@ -79,6 +100,10 @@ class Bugs extends React.Component {
                 <div className="row">
                     {bugItems}
                 </div>
+                <MyModal
+                    show={this.state.show}
+                    onHide={() => this.handleShow(false)}
+            />
             </div>
 
             
@@ -89,8 +114,20 @@ class Bugs extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    bugs: state.bugs
+    bugs: state.bugs,
+    editbug: state.editbug,
+    editmode: state.editmode,
+    users: state.users.users
+
+})
+
+const mapDispatchToProps = dispatch => ({
+    enbaleEditMode: () => dispatch({type: EDIT_MODE}),
+    
+    fetchBugs: () => dispatch(fetchBugs())
+
+
 })
 
 
-export default connect(mapStateToProps, { fetchBugs })(Bugs);
+export default connect(mapStateToProps, mapDispatchToProps)(Bugs);

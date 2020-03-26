@@ -2,13 +2,18 @@ import React, {useState} from 'react'
 import Bugs from './Bugs'
 import {  Button } from 'react-bootstrap';
 import MyModal from'./MyModal'
+import { CREATE_MODE } from '../actions/types';
+import { connect } from 'react-redux';
 
 
-export default function Profile(props) {
+function Profile(props) {
     
     const [show, setShow] = useState(false);
 
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        setShow(true)
+        props.enableCreateMode()
+    };
   
     return (
         <div id="profile">
@@ -31,7 +36,6 @@ export default function Profile(props) {
                 </div>
             </div>
             <MyModal
-                users={props.users}
                 show={show}
                 onHide={() => setShow(false)}
             />
@@ -47,3 +51,16 @@ export default function Profile(props) {
         </div> 
     )
 }
+
+
+const mapDispatchToProps = dispatch => ({
+    enableCreateMode: () => dispatch({type: CREATE_MODE}),
+    
+   
+
+
+})
+
+
+
+export default connect(null, mapDispatchToProps )(Profile);
