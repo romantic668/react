@@ -33,14 +33,17 @@ class Bugs extends React.Component {
             return (
             <div className={color} key={bug._id}>
                 <div className="card-header">{bug.title}</div>
-                <div className="card-body">
+                <div className="card-body d-flex flex-column">
                     <h4 className="card-title">{bug.priority}</h4>
                     {bug.finished ? <h4 className="card-title">Completed</h4> : <h4 className="card-title">In Progress</h4>}
                     <p className="card-text">{bug.description}</p>
                     <h3>{bug.createdAt}</h3>
                     <h3>Assigned to</h3>
-                    {!bug.finished &&<button type="button" className="btn btn-info btn-lg">Edit</button>}<br/>
-                    {!bug.finished && <button type="button" className="btn btn-info btn-lg">Finish</button>}
+                    <div className="mt-auto">
+                        {!bug.finished &&<button type="button" className="btn btn-info btn-lg">Edit</button>}<br/>
+                        {!bug.finished && <button type="button" className="btn btn-info btn-lg">Finish</button>}
+                    </div>
+                    
                 </div>
             </div>
         )})

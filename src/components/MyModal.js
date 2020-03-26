@@ -15,26 +15,36 @@ class MyModal extends Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  handleSubmit(event) {
+    const form = event.currentTarget;
 
-    const bug = {
-      title: this.state.title,
-      description: this.state.description,
-      priority: this.state.priority,
-      // username: this.state.username
+    event.preventDefault();
+    event.stopPropagation();
 
-    };
-    console.log(bug)
 
-    this.props.createBug(bug);
+
+    if (form.checkValidity()) {
+ 
+
+      const bug = {
+        title: this.state.title,
+        description: this.state.description,
+        priority: this.state.priority,
+        // username: this.state.username
+
+      };
+      this.setState({title:'', description:''})
+      console.log(bug)
+      this.props.createBug(bug);}
+      this.props.onHide();
+      
   }
 
   render(){
@@ -53,18 +63,19 @@ class MyModal extends Component {
         style={{opacity:1}}
         centered
       >
-        <Form onSubmit={this.onSubmit}>
+        <Form onSubmit={this.handleSubmit}>
 
           <Modal.Header closeButton>
 
             
             {/* <Modal.Title id="contained-modal-title-vcenter"> */}
+          
             <InputGroup className="mb-3" size='lg'>
               <InputGroup.Prepend>
                 <InputGroup.Text id="inputGroup-sizing-default" >Title</InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl
-              
+                required
                 name="title"
                 onChange={this.onChange}
                 value={this.state.title} 
@@ -72,6 +83,7 @@ class MyModal extends Component {
                 aria-label="Title"
                 aria-describedby="inputGroup-sizing-default"
               />
+              
             </InputGroup>
             {/* </Modal.Title> */}
           </Modal.Header>
@@ -79,6 +91,7 @@ class MyModal extends Component {
             <h4>
               <Form.Label>Set Priority</Form.Label>
               <Form.Control as="select" size="lg" name="priority"
+              required
               onChange={this.onChange}
               value={this.state.priority}  >
                 <option>URGENT</option>
@@ -93,6 +106,7 @@ class MyModal extends Component {
                 <InputGroup.Text>Description</InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl 
+              required
               name="description"
               onChange={this.onChange}
               value={this.state.description} 
@@ -100,11 +114,12 @@ class MyModal extends Component {
               aria-label="Description" 
               style={{fontSize:"80%"}} 
               placeholder="describe the issue"/>
+            
             </InputGroup>
             
             <h4>
               <Form.Label>Assign it to</Form.Label>
-                <Form.Control as="select" size="lg" >
+                <Form.Control required as="select" size="lg" >
                   {userItems}
 
                   
@@ -114,7 +129,7 @@ class MyModal extends Component {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.props.onHide}>Close</Button>
-            <Button variant="primary" type="submit" onClick={this.props.onHide}>Save</Button> 
+            <Button variant="primary" type="submit" >Save</Button> 
           </Modal.Footer>
           </Form>
       </Modal>
