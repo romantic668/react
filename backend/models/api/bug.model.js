@@ -10,6 +10,7 @@ var bugSchema = new Schema({
                     default: 'COMMON',
                     required: true
                 },
+    deadline: { type: Date, required:true},
     finished: { type: Boolean, reuired:true ,default: false}
   
 }, {

@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import { InputGroup, Modal, FormControl, Button, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createBug } from '../actions/bugActions'
+import { DateTime } from 'react-datetime-bootstrap';
+
 
 class MyModal extends Component {
 
@@ -10,16 +12,26 @@ class MyModal extends Component {
     this.state = {
       title: '',
       description: '',
-      priority: 'COMMON',
-      username: ''
+      priority: '',
+      username: '',
+      deadline: new Date().toDateString("yyyy-MM-dd")
     };
 
     this.onChange = this.onChange.bind(this);
+    this.onChangeDate = this.onChangeDate.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  onChangeDate(deadline) {
+    this.setState({
+      deadline: deadline
+    })
+    console.log(deadline)
   }
 
   handleSubmit(event) {
@@ -37,7 +49,8 @@ class MyModal extends Component {
         title: this.state.title,
         description: this.state.description,
         priority: this.state.priority,
-        // username: this.state.username
+        username: this.state.username,
+        deadline: this.state.deadline
 
       };
       this.setState({title:'', description:''})
@@ -51,7 +64,7 @@ class MyModal extends Component {
 
   
     const userItems = this.props.users.map((user) =>
-      <option key={user._id}>{user.username}</option>
+      <option key={user._id} value={user._id}>{user.username}</option>
     );
     return (
       <Modal
@@ -94,6 +107,7 @@ class MyModal extends Component {
               required
               onChange={this.onChange}
               value={this.state.priority}  >
+                <option value="">Select your option</option>
                 <option>URGENT</option>
                 <option>COMMON</option>
                 <option>LOW</option>
@@ -116,10 +130,27 @@ class MyModal extends Component {
               placeholder="describe the issue"/>
             
             </InputGroup>
+            <div>
+            
+              <h4>Deadline:</h4>
+              <DateTime pickerOptions={{format:"LL"}} 
+                required
+                name="deadline"
+                onChange={this.onChangeDate}
+                value={this.state.deadline}
+                />
+              
+              
+            </div>
             
             <h4>
               <Form.Label>Assign it to</Form.Label>
-                <Form.Control required as="select" size="lg" >
+                <Form.Control required as="select" size="lg"
+                required
+                name="username"
+                onChange={this.onChange}
+                value={this.state.username}  >
+                  <option value="">Select your option</option>
                   {userItems}
 
                   

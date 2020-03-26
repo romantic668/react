@@ -37,8 +37,9 @@ class Bugs extends React.Component {
                     <h4 className="card-title">{bug.priority}</h4>
                     {bug.finished ? <h4 className="card-title">Completed</h4> : <h4 className="card-title">In Progress</h4>}
                     <p className="card-text">{bug.description}</p>
-                    <h3>{bug.createdAt}</h3>
-                    <h3>Assigned to</h3>
+                    {bug.username && <h3>Assigned to : {bug.username.username}</h3>}
+                    {bug.deadline && <h4>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h4>}
+                    
                     <div className="mt-auto">
                         {!bug.finished &&<button type="button" className="btn btn-info btn-lg">Edit</button>}<br/>
                         {!bug.finished && <button type="button" className="btn btn-info btn-lg">Finish</button>}
@@ -65,8 +66,8 @@ class Bugs extends React.Component {
                         {bug.finished ? <h4 className="card-title">Completed</h4> : <h4 className="card-title">In Progress</h4>}
 
                         <p className="card-text">{bug.description}</p>
-                        <h3>{bug.createdAt}</h3>
-                        <h3>Assigned to</h3>
+                        {bug.username && <h3>Assigned to : {bug.username.username}</h3>}
+                        {bug.deadline && <h4>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h4>}
                         
                     </div>
                 </div>
