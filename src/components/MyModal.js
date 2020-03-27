@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { InputGroup, Modal, FormControl, Button, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { createBug } from '../actions/bugActions'
+import { createBug , editBug} from '../actions/bugActions'
 import { DateTime } from 'react-datetime-bootstrap';
 
 
@@ -53,9 +53,21 @@ class MyModal extends Component {
         deadline: this.state.deadline
 
       };
+
+      const editBug = {
+        id: this.props.editbug._id,
+        title: this.state.title,
+        description: this.state.description,
+        priority: this.state.priority,
+        deadline: this.state.deadline
+
+      };
       this.setState({title:'', description:''})
       console.log(bug)
-      this.props.createBug(bug);}
+      if(this.props.editmode)
+        this.props.editBug(editBug)
+      else
+        this.props.createBug(bug);}
       this.props.onHide();
       
   }
@@ -92,7 +104,7 @@ class MyModal extends Component {
                 name="title"
                 onChange={this.onChange}
                 value={this.state.title} 
-                placeholder="Title"
+                placeholder={this.props.editmode ? this.props.editbug.title :"Title"}
                 aria-label="Title"
                 aria-describedby="inputGroup-sizing-default"
               />
@@ -107,7 +119,8 @@ class MyModal extends Component {
               required
               onChange={this.onChange}
               value={this.state.priority}  >
-                <option value="">Select your option</option>
+                
+                <option value="">Select your option...</option>
                 <option>URGENT</option>
                 <option>COMMON</option>
                 <option>LOW</option>
@@ -127,7 +140,7 @@ class MyModal extends Component {
               as="textarea" 
               aria-label="Description" 
               style={{fontSize:"80%"}} 
-              placeholder="describe the issue"/>
+              placeholder={this.props.editmode ? this.props.editbug.description :"Please describe the issue"}/>
             
             </InputGroup>
             <div>
@@ -150,7 +163,7 @@ class MyModal extends Component {
                 name="username"
                 onChange={this.onChange}
                 value={this.state.username}  >
-                  <option value="">Select your option</option>
+                  <option value="">Select your option...</option>
                   {userItems}
 
                   
@@ -177,5 +190,12 @@ const mapStateToProps = state => ({
   users: state.users.users
 })
 
+const mapDispatchToProps = dispatch => ({
+  editBug: (bug) => dispatch(editBug(bug)),
+  createBug: (bug) => dispatch(createBug(bug))
 
-  export default connect (mapStateToProps, {createBug})(MyModal)
+
+})
+
+
+  export default connect (mapStateToProps, mapDispatchToProps)(MyModal)

@@ -1,4 +1,4 @@
-import {FETCH_BUGS, NEW_BUG, SHOW_COMPLETE, SHOW_IN_PROGRESS, EDIT_BUG, EDIT_MODE, CREATE_MODE} from '../actions/types';
+import {FETCH_BUGS,FETCH_BUG, NEW_BUG, SHOW_COMPLETE, SHOW_IN_PROGRESS, EDIT_BUG, EDIT_MODE, CREATE_MODE, FINISH_BUG} from '../actions/types';
 
 const initialState = {
     items: [],
@@ -15,12 +15,22 @@ export default function(state = initialState, action) {
                 ...state,
                 items: action.payload
             };
+        case FETCH_BUG:
+            return {
+                ...state,
+                editbug: action.payload
+            };
         case NEW_BUG:
             return{
                 ...state,
                 item: action.payload
             }
         case EDIT_BUG:
+            return{
+                ...state,
+                editbug: action.payload
+            };
+        case FINISH_BUG:
             return{
                 ...state,
                 editbug: action.payload
