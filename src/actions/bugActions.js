@@ -1,4 +1,4 @@
-import {FETCH_BUGS, FETCH_BUG, NEW_BUG, EDIT_BUG, FINISH_BUG } from './types';
+import {FETCH_BUGS, FETCH_BUG, NEW_BUG, EDIT_BUG, FINISH_BUG, DELETE_BUG } from './types';
 
 export function fetchBugs(){
     return function(dispatch){
@@ -59,13 +59,24 @@ export const editBug = bug => dispatch => {
 export const finishBug = id => dispatch => {
     fetch('http://localhost:5000/api/bugs/finish/'+id, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
         })
         .then((response) => response.json())
         .then((bug) => dispatch({
             type: FINISH_BUG,
+            payload: bug
+        }))
+        
+}
+
+export const deleteBug = id => dispatch => {
+    fetch('http://localhost:5000/api/bugs/'+id, {
+        method: 'DELETE',
+      
+        
+        })
+        .then((response) => response.json())
+        .then((bug) => dispatch({
+            type: DELETE_BUG,
             payload: bug
         }))
         

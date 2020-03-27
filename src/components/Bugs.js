@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { fetchBugs, fetchBug, finishBug } from '../actions/bugActions'
+import { fetchBugs, fetchBug, finishBug, deleteBug} from '../actions/bugActions'
 import MyModal from'./MyModal'
 import { EDIT_MODE } from '../actions/types';
 
@@ -56,7 +56,7 @@ class Bugs extends React.Component {
             return (
             <div className={color} key={bug._id}>
                 <div className="card-header">{bug.title}
-                    <button type="button" className="close" aria-label="Close">
+                    <button onClick={() => this.props.deleteBug(bug._id)} type="button" className="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 
@@ -132,7 +132,8 @@ const mapDispatchToProps = dispatch => ({
     enbaleEditMode: () => dispatch({type: EDIT_MODE}),
     fetchBug: (id) => dispatch(fetchBug(id)),
     fetchBugs: () => dispatch(fetchBugs()),
-    finishBug: (id) => dispatch(finishBug(id))
+    finishBug: (id) => dispatch(finishBug(id)),
+    deleteBug: (id) => dispatch(deleteBug(id)),
 
 
 })

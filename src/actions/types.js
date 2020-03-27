@@ -7,6 +7,8 @@ export const FETCH_USERS = 'FETCH_USERS';
 export const NEW_USER = 'NEW_USER';
 export const EDIT_BUG = 'EDIT_BUG';
 export const FINISH_BUG = 'FINISH_BUG';
+export const DELETE_BUG = 'DETELE_BUG';
+
 export const EDIT_MODE = 'EDIT_MODE';
 export const CREATE_MODE = 'CREATE_MODE';
 

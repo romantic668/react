@@ -1,5 +1,7 @@
 const router = require('express').Router();
 let Bug = require('../models/api/bug.model');
+let User = require('../models/api/user.model');
+
 
 router.route('/').get((req, res) => {
     Bug.find()
@@ -16,9 +18,6 @@ router.route('/').post((req, res) => {
     const username = req.body.username;
     const deadline = req.body.deadline;
 
-    // const finished = req.body.finished;
-
-
 
     const newBug = new Bug({
         title,
@@ -26,14 +25,25 @@ router.route('/').post((req, res) => {
         priority,
         username,
         deadline
-        // finished,
 
     
     
     });
-    
+
     newBug.save()
-        .then(bugs => res.json(bugs))
+        .then(bug => {
+
+            User.updateOne({
+                _id: username
+              }, {
+                $push: {
+                  bugs: bug._id
+                }
+              })
+               .catch(err => res.status(400).json('Error: ' + err));
+
+
+            res.json(bug)})
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -77,7 +87,20 @@ router.route('/finish/:id').put((req, res) => {
 
 });
 
+router.route('/:id').delete((req, res) => {
+    Bug.findByIdAndRemove(req.params.id)
+        .populate('username')
+        .then(bug =>{
+            res.json(bug)
+            User.updateOne( {_id: bug.username._id}, { $pull: {bugs: bug._id } } )
+            .catch(err => res.status(400).json('Error: ' + err));
 
+
+            
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+
+});
 
 
 
