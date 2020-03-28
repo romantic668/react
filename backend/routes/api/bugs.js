@@ -1,6 +1,6 @@
 const router = require('express').Router();
-let Bug = require('../models/api/bug.model');
-let User = require('../models/api/user.model');
+let Bug = require('../../models/bug.model');
+let User = require('../../models/user.model');
 
 
 router.route('/').get((req, res) => {
