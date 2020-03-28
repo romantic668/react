@@ -30,7 +30,7 @@ function Profile(props) {
             <h2 className="display-4">Issues Assigned To You</h2>
             <div className="container">
                 <div className="row">
-                    <Bugs activeTab={props.activeTab}/>
+                    <Bugs />
                    
 
                 </div>

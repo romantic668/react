@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { fetchBugs, fetchBug, finishBug, deleteBug} from '../actions/bugActions'
+import { fetchUsers } from '../actions/userActions'
+
 import MyModal from'./MyModal'
 import { EDIT_MODE } from '../actions/types';
 
@@ -18,6 +20,8 @@ class Bugs extends React.Component {
 
     componentDidMount(){
         this.props.fetchBugs();
+        this.props.fetchUsers();
+
     }
 
     componentDidUpdate(prevProps){
@@ -55,20 +59,22 @@ class Bugs extends React.Component {
             
             return (
             <div className={color} key={bug._id}>
-                <div className="card-header">{bug.title}
+                <div className="card-header">
                     <button onClick={() => this.props.deleteBug(bug._id)} type="button" className="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <div>{bug.title}</div>
                 
                 </div>
                 <div className="card-body d-flex flex-column">
                     <h4 className="card-title">{bug.priority}</h4>
                     {bug.finished ? <h4 className="card-title">Completed</h4> : <h4 className="card-title">In Progress</h4>}
                     <p className="card-text">{bug.description}</p>
-                    {bug.username && <h3>Assigned to : {bug.username.username}</h3>}
-                    {bug.deadline && <h4>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h4>}
+                    
                     
                     <div className="mt-auto">
+                        {bug.username && <h3>Assigned to : {bug.username.username}</h3>}
+                        {bug.deadline && <h4>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h4>}
                         {!bug.finished &&<button type="button" onClick={() => this.handleShow(true,bug._id)} className="btn btn-info btn-lg">Edit</button>}<br/>
                         {!bug.finished && <button type="button" onClick={() => this.props.finishBug(bug._id)}className="btn btn-info btn-lg">Finish</button>}
                     </div>
@@ -89,13 +95,16 @@ class Bugs extends React.Component {
                 <div className={color} key={bug._id}>
                     <div className="card-header">{bug.title}</div>
 
-                    <div className="card-body">
+                    <div className="card-body d-flex flex-column">
                         <h4 className="card-title">{bug.priority}</h4>
                         {bug.finished ? <h4 className="card-title">Completed</h4> : <h4 className="card-title">In Progress</h4>}
 
                         <p className="card-text">{bug.description}</p>
-                        {bug.username && <h3>Assigned to : {bug.username.username}</h3>}
-                        {bug.deadline && <h4>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h4>}
+                        <div className="mt-auto">
+
+                            {bug.username && <h3>Assigned to : {bug.username.username}</h3>}
+                            {bug.deadline && <h4>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h4>}
+                        </div>
                         
                     </div>
                 </div>
@@ -134,6 +143,8 @@ const mapDispatchToProps = dispatch => ({
     fetchBugs: () => dispatch(fetchBugs()),
     finishBug: (id) => dispatch(finishBug(id)),
     deleteBug: (id) => dispatch(deleteBug(id)),
+    fetchUsers: () => dispatch(fetchUsers())
+
 
 
 })
