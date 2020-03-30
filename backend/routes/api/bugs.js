@@ -26,8 +26,8 @@ router.route('/').post((req, res) => {
         username,
         deadline
 
-    
-    
+
+
     });
 
     newBug.save()
@@ -35,15 +35,16 @@ router.route('/').post((req, res) => {
 
             User.updateOne({
                 _id: username
-              }, {
+            }, {
                 $push: {
-                  bugs: bug._id
+                    bugs: bug._id
                 }
-              })
-               .catch(err => res.status(400).json('Error: ' + err));
+            })
+                .catch(err => res.status(400).json('Error: ' + err));
 
 
-            res.json(bug)})
+            res.json(bug)
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -55,17 +56,17 @@ router.route('/:id').get((req, res) => {
 
 router.route('/:id').put((req, res) => {
     Bug.findById(req.params.id)
-        .then(bug =>{
+        .then(bug => {
             bug.title = req.body.title;
             bug.description = req.body.description;
             bug.priority = req.body.priority;
             bug.deadline = req.body.deadline;
 
             bug.save()
-            .then(bug => res.json(bug))
-            .catch(err => res.status(400).json('Error: ' + err));
+                .then(bug => res.json(bug))
+                .catch(err => res.status(400).json('Error: ' + err));
 
-            
+
         })
         .catch(err => res.status(400).json('Error: ' + err));
 
@@ -73,15 +74,15 @@ router.route('/:id').put((req, res) => {
 
 router.route('/finish/:id').put((req, res) => {
     Bug.findById(req.params.id)
-        .then(bug =>{
-            
+        .then(bug => {
+
             bug.finished = true;
 
             bug.save()
-            .then(bug => res.json(bug))
-            .catch(err => res.status(400).json('Error: ' + err));
+                .then(bug => res.json(bug))
+                .catch(err => res.status(400).json('Error: ' + err));
 
-            
+
         })
         .catch(err => res.status(400).json('Error: ' + err));
 
@@ -90,13 +91,13 @@ router.route('/finish/:id').put((req, res) => {
 router.route('/:id').delete((req, res) => {
     Bug.findByIdAndRemove(req.params.id)
         .populate('username')
-        .then(bug =>{
+        .then(bug => {
             res.json(bug)
-            User.updateOne( {_id: bug.username._id}, { $pull: {bugs: bug._id } } )
-            .catch(err => res.status(400).json('Error: ' + err));
+            User.updateOne({ _id: bug.username._id }, { $pull: { bugs: bug._id } })
+                .catch(err => res.status(400).json('Error: ' + err));
 
 
-            
+
         })
         .catch(err => res.status(400).json('Error: ' + err));
 

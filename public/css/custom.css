@@ -16,15 +16,15 @@ ul li span {
     display: block;
 }
 
+html {
+  font-size: 100%; }
 
-body{
-	  font-size: 250%;
-
+#button{
+  margin-top: 3%
 }
 
-.btn{
-  font-size: 80%;
-}
+
+
 
 /* Add a black background color to the top navigation */
 .topnav {
@@ -39,10 +39,11 @@ body{
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  /* font-size: 17px; */
 }
 
 .card {
-  margin-top: 5%;
+  margin-top: 3%;
 }
+
 
