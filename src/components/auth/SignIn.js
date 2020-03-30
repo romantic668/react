@@ -80,7 +80,7 @@ export default function SignIn(props) {
                     <AssignmentIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Welcom To Bug Tracker
                     </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
@@ -125,11 +125,7 @@ export default function SignIn(props) {
                         Sign In
                         </Button>
                     <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                                </Link>
-                        </Grid>
+
                         <Grid item>
                             <Link href="#" variant="body2" onClick={handleOpen}>
                                 {"Don't have an account? Sign Up"}

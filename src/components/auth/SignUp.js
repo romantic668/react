@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
+        padding: theme.spacing(3, 4, 7),
     },
     avatar: {
         margin: theme.spacing(1),
@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    main: {
+        padding: 0
+    }
 }));
 
 export default function SignUp(props) {
@@ -79,7 +82,7 @@ export default function SignUp(props) {
             >
                 <Fade in={props.open}>
 
-                    <Container component="main" maxWidth="xs" >
+                    <Container className={classes.main} component="main" maxWidth="xs" >
                         <CssBaseline />
                         <div className={classes.paper}>
                             <Avatar className={classes.avatar}>
@@ -90,29 +93,19 @@ export default function SignUp(props) {
                             </Typography>
                             <form className={classes.form} noValidate>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} >
                                         <TextField
-                                            autoComplete="fname"
-                                            name="firstName"
+                                            autoComplete="username"
+                                            name="username"
                                             variant="outlined"
                                             required
                                             fullWidth
-                                            id="firstName"
-                                            label="First Name"
+                                            id="username"
+                                            label="User Name"
                                             autoFocus
                                         />
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField
-                                            variant="outlined"
-                                            required
-                                            fullWidth
-                                            id="lastName"
-                                            label="Last Name"
-                                            name="lastName"
-                                            autoComplete="lname"
-                                        />
-                                    </Grid>
+
                                     <Grid item xs={12}>
                                         <TextField
                                             variant="outlined"
@@ -136,12 +129,7 @@ export default function SignUp(props) {
                                             autoComplete="current-password"
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <FormControlLabel
-                                            control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                            label="I want to receive inspiration, marketing promotions and updates via email."
-                                        />
-                                    </Grid>
+
                                 </Grid>
                                 <Button
                                     type="submit"
@@ -154,7 +142,7 @@ export default function SignUp(props) {
                                     </Button>
                                 <Grid container justify="flex-end">
                                     <Grid item>
-                                        <Link href="#" variant="body2">
+                                        <Link href="#" onClick={props.onClose} variant="body2">
                                             Already have an account? Sign in
                                             </Link>
                                     </Grid>
