@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
+import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,15 +9,19 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import { createMuiTheme } from "@material-ui/core/styles";
-import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import SignUp from './SignUp'
-
-
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { connect } from 'react-redux';
+import { clearErrors } from '../../actions/errorActions';
+import {
+    useHistory
+} from "react-router-dom";
+import { login } from '../../actions/authActions';
+
+
 
 
 function Copyright() {
@@ -51,26 +56,63 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-    },
-    multilineColor: {
-        color: 'white'
     }
 
 }));
 
 
 
-export default function SignIn(props) {
+function SignIn(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [modal, setModal] = useState(false);
+    const [msg, setMsg] = useState(null);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleOpen = () => {
-        setOpen(true);
+    const handleToggle = useCallback(() => {
+        // Clear errors
+        props.clearErrors();
+        setModal(!modal);
+    }, [props, modal]);
+    let history = useHistory();
+
+    const handleChangeEmail = (e) => setEmail(e.target.value);
+    const handleChangePassword = (e) => setPassword(e.target.value);
+
+    const handleOnSubmit = (e) => {
+        e.preventDefault();
+
+        const user = { email, password };
+
+        // Attempt to login
+        props.login(user);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    useEffect(() => {
+        // Check for register error
+        if (props.error.id === 'REGISTER_FAIL') {
+            setMsg(props.error.msg.msg);
+        }
+
+        else if (props.error.id === 'LOGIN_FAIL') {
+            setMsg(props.error.msg.msg);
+        } else {
+            setMsg(null);
+        }
+
+        // If authenticated, close modal
+
+        if (props.isAuthenticated) {
+            if (modal)
+                handleToggle();
+            props.clearErrors();
+            history.push('/profile')
+
+        }
+
+    }, [props.error, modal, handleToggle, history]);
+
+
 
     return (
         <Container component="main" maxWidth="xs" >
@@ -82,11 +124,10 @@ export default function SignIn(props) {
                 <Typography component="h1" variant="h5">
                     Welcom To Bug Tracker
                     </Typography>
-                <form className={classes.form} noValidate>
+                {msg ? <Alert severity="error">{msg}</Alert> : null}
+                <form className={classes.form} onSubmit={handleOnSubmit} noValidate>
                     <TextField
-                        InputProps={{
-                            className: classes.multilineColor
-                        }}
+
                         variant="outlined"
                         margin="normal"
                         required
@@ -96,11 +137,11 @@ export default function SignIn(props) {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        onChange={handleChangeEmail}
+
                     />
                     <TextField
-                        InputProps={{
-                            className: classes.multilineColor
-                        }}
+
                         variant="outlined"
                         margin="normal"
                         required
@@ -110,6 +151,8 @@ export default function SignIn(props) {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={handleChangePassword}
+
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
@@ -121,13 +164,19 @@ export default function SignIn(props) {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={props.handleSelect.bind(this, 0)}
                     >
                         Sign In
                         </Button>
                     <Grid container>
+                        <Grid item xs>
+                            <Link href="/bugs" variant="body2" onClick={props.handleSelect.bind(this, 1)}>
+                                {"Guest Link"}
+                            </Link>
+                        </Grid>
 
                         <Grid item>
-                            <Link href="#" variant="body2" onClick={handleOpen}>
+                            <Link href="#" variant="body2" onClick={handleToggle}>
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
@@ -138,9 +187,21 @@ export default function SignIn(props) {
                 <Copyright />
             </Box>
             <SignUp
-                open={open}
-                onClose={handleClose}
+                open={modal}
+                onClose={handleToggle}
+                msg={msg}
+                handleSelect={props.handleSelect}
             />
         </Container >
     );
 }
+
+
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    error: state.error
+});
+
+export default connect(mapStateToProps, { login, clearErrors })(
+    SignIn
+);

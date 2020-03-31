@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import { InputGroup, Modal, FormControl, Button, Form} from 'react-bootstrap';
+import React, { Component } from 'react'
+import { InputGroup, Modal, FormControl, Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { createBug , editBug} from '../actions/bugActions'
+import { createBug, editBug } from '../actions/bugActions'
 import { DateTime } from 'react-datetime-bootstrap';
 
 
@@ -43,7 +43,7 @@ class MyModal extends Component {
 
 
     if (form.checkValidity()) {
- 
+
 
       const bug = {
         title: this.state.title,
@@ -62,19 +62,20 @@ class MyModal extends Component {
         deadline: this.state.deadline
 
       };
-      this.setState({title:'', description:''})
+      this.setState({ title: '', description: '' })
       console.log(bug)
-      if(this.props.editmode)
+      if (this.props.editmode)
         this.props.editBug(editBug)
       else
-        this.props.createBug(bug);}
-      this.props.onHide();
-      
+        this.props.createBug(bug);
+    }
+    this.props.onHide();
+
   }
 
-  render(){
+  render() {
 
-  
+
     const userItems = this.props.users.map((user) =>
       <option key={user._id} value={user._id}>{user.username}</option>
     );
@@ -83,19 +84,18 @@ class MyModal extends Component {
         onHide={this.props.onHide}
         show={this.props.show}
         createbug={this.createBug}
-        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
-        style={{opacity:1}}
+        style={{ opacity: 1 }}
         centered
       >
         <Form onSubmit={this.handleSubmit}>
 
           <Modal.Header closeButton>
 
-            
+
             {/* <Modal.Title id="contained-modal-title-vcenter"> */}
-          
-            <InputGroup className="mb-3" size='lg'>
+
+            <InputGroup className="mb-3">
               <InputGroup.Prepend>
                 <InputGroup.Text id="inputGroup-sizing-default" >Title</InputGroup.Text>
               </InputGroup.Prepend>
@@ -103,81 +103,82 @@ class MyModal extends Component {
                 required
                 name="title"
                 onChange={this.onChange}
-                value={this.state.title} 
-                placeholder={this.props.editmode ? this.props.editbug.title :"Title"}
+                value={this.state.title}
+                placeholder={this.props.editmode ? this.props.editbug.title : "Title"}
                 aria-label="Title"
                 aria-describedby="inputGroup-sizing-default"
               />
-              
+
             </InputGroup>
             {/* </Modal.Title> */}
           </Modal.Header>
           <Modal.Body>
-            <h4>
+            <h5>
               <Form.Label>Set Priority</Form.Label>
-              <Form.Control as="select" size="lg" name="priority"
-              required
-              onChange={this.onChange}
-              value={this.state.priority}  >
-                
+              <Form.Control as="select" name="priority"
+                required
+                onChange={this.onChange}
+                value={this.state.priority}  >
+
                 <option value="">Select your option...</option>
                 <option>URGENT</option>
                 <option>COMMON</option>
                 <option>LOW</option>
-                
+
               </Form.Control>
-            </h4>
-            
+            </h5>
+
             <InputGroup >
               <InputGroup.Prepend >
                 <InputGroup.Text>Description</InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl 
-              required
-              name="description"
-              onChange={this.onChange}
-              value={this.state.description} 
-              as="textarea" 
-              aria-label="Description" 
-              style={{fontSize:"80%"}} 
-              placeholder={this.props.editmode ? this.props.editbug.description :"Please describe the issue"}/>
-            
+              <FormControl
+                size="lg"
+                required
+                name="description"
+                onChange={this.onChange}
+                value={this.state.description}
+                as="textarea"
+                aria-label="Description"
+                // style={{fontSize:"80%"}} 
+                placeholder={this.props.editmode ? this.props.editbug.description : "Please describe the issue"} />
+
             </InputGroup>
             <div>
-            
-              <h4>Deadline:</h4>
-              <DateTime pickerOptions={{format:"LL"}} 
+
+              <h5>Deadline:</h5>
+              <DateTime pickerOptions={{ format: "LL" }}
                 required
                 name="deadline"
                 onChange={this.onChangeDate}
                 value={this.state.deadline}
-                />
-              
-              
+              />
+
+
             </div>
             {this.props.editmode ? null :
-            <h4>
-              <Form.Label>Assign it to</Form.Label>
-                <Form.Control required as="select" size="lg"
-                required
-                name="username"
-                onChange={this.onChange}
-                value={this.state.username}  >
+              <h5>
+                <Form.Label>Assign it to</Form.Label>
+                <Form.Control required as="select"
+                  required
+                  name="username"
+                  onChange={this.onChange}
+                  value={this.state.username}  >
                   <option value="">Select your option...</option>
                   {userItems}
 
-                  
+
                 </Form.Control>
-            </h4>
+              </h5>
 
             }
-            
+
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.props.onHide}>Close</Button>
-            <Button variant="primary" type="submit" >{this.props.editmode ? "Edit" : "Save"}</Button> 
+            <Button variant="primary" type="submit" >{this.props.editmode ? "Edit" : "Save"}</Button>
           </Modal.Footer>
-          </Form>
+        </Form>
       </Modal>
     );
   }
@@ -198,4 +199,4 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-  export default connect (mapStateToProps, mapDispatchToProps)(MyModal)
+export default connect(mapStateToProps, mapDispatchToProps)(MyModal)

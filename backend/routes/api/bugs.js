@@ -1,6 +1,8 @@
 const router = require('express').Router();
 let Bug = require('../../models/bug.model');
 let User = require('../../models/user.model');
+const auth = require('../../middleware/auth');
+
 
 
 router.route('/').get((req, res) => {
@@ -10,6 +12,8 @@ router.route('/').get((req, res) => {
         .then(bugs => res.json(bugs))
         .catch(err => res.status(400).json('Error: ' + err));
 });
+
+router.use(auth);
 
 router.route('/').post((req, res) => {
     const title = req.body.title;

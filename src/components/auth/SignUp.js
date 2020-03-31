@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
+import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,19 +13,12 @@ import Container from '@material-ui/core/Container';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import { connect } from 'react-redux';
+import { register } from '../../actions/authActions';
+import { clearErrors } from '../../actions/errorActions';
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+
+
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -61,8 +52,33 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SignUp(props) {
+function SignUp(props) {
     const classes = useStyles();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+
+
+    const handleChangeName = (e) => setName(e.target.value);
+    const handleChangeEmail = (e) => setEmail(e.target.value);
+    const handleChangePassword = (e) => setPassword(e.target.value);
+
+    const handleOnSubmit = (e) => {
+        e.preventDefault();
+
+        // Create user object
+        const user = {
+            username: name,
+            email,
+            password
+        };
+        // Attempt to login
+        props.register(user);
+    };
+
+
+
 
 
     return (
@@ -82,7 +98,10 @@ export default function SignUp(props) {
             >
                 <Fade in={props.open}>
 
-                    <Container className={classes.main} component="main" maxWidth="xs" >
+                    <Container
+                        className={classes.main} component="main" maxWidth="xs" >
+
+
                         <CssBaseline />
                         <div className={classes.paper}>
                             <Avatar className={classes.avatar}>
@@ -91,18 +110,21 @@ export default function SignUp(props) {
                             <Typography component="h1" variant="h5">
                                 Sign up
                             </Typography>
-                            <form className={classes.form} noValidate>
+                            {props.msg ? <Alert severity="error">{props.msg}</Alert> : null}
+                            <form className={classes.form} onSubmit={handleOnSubmit} noValidate>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} >
                                         <TextField
-                                            autoComplete="username"
-                                            name="username"
+                                            autoComplete="name"
+                                            name="name"
                                             variant="outlined"
                                             required
                                             fullWidth
-                                            id="username"
+                                            id="name"
                                             label="User Name"
                                             autoFocus
+                                            onChange={handleChangeName}
+
                                         />
                                     </Grid>
 
@@ -115,6 +137,8 @@ export default function SignUp(props) {
                                             label="Email Address"
                                             name="email"
                                             autoComplete="email"
+                                            onChange={handleChangeEmail}
+
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -127,6 +151,8 @@ export default function SignUp(props) {
                                             type="password"
                                             id="password"
                                             autoComplete="current-password"
+                                            onChange={handleChangePassword}
+
                                         />
                                     </Grid>
 
@@ -137,6 +163,7 @@ export default function SignUp(props) {
                                     variant="contained"
                                     color="primary"
                                     className={classes.submit}
+                                    onClick={props.handleSelect.bind(this, 0)}
                                 >
                                     Sign Up
                                     </Button>
@@ -149,7 +176,6 @@ export default function SignUp(props) {
                                 </Grid>
                             </form>
                         </div>
-
                     </Container>
 
                 </Fade>
@@ -158,3 +184,13 @@ export default function SignUp(props) {
 
     );
 }
+
+
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    error: state.error
+});
+
+export default connect(mapStateToProps, { register, clearErrors })(
+    SignUp
+);

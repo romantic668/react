@@ -49,40 +49,42 @@ class Bugs extends React.Component {
     }
 
     render() {
+        let bugItems
+        if (this.props.auth && this.props.auth.user && this.props.auth.user.bugs) {
+            bugItems = this.props.auth.user.bugs.map(bug => {
+                let color = "col-md-4 card bg-danger"
+                if (bug.priority === 'COMMON')
+                    color = "col-md-4 card bg-warning"
+                else if (bug.priority === 'LOW')
+                    color = "col-md-4 card bg-success"
 
-        let bugItems = this.props.bugs.items.map(bug => {
-            let color = "col-md-4 card bg-danger"
-            if (bug.priority === 'COMMON')
-                color = "col-md-4 card bg-warning"
-            else if (bug.priority === 'LOW')
-                color = "col-md-4 card bg-success"
+                return (
+                    <div className={color} key={bug._id}>
+                        <div className="card-header">
+                            <button onClick={() => this.props.deleteBug(bug._id)} type="button" className="close" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div><h4>{bug.title}</h4></div>
 
-            return (
-                <div className={color} key={bug._id}>
-                    <div className="card-header">
-                        <button onClick={() => this.props.deleteBug(bug._id)} type="button" className="close" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <div><h4>{bug.title}</h4></div>
-
-                    </div>
-                    <div className="card-body d-flex flex-column">
-                        <h5 className="card-title">{bug.priority}</h5>
-                        {bug.finished ? <h5 className="card-title">Completed</h5> : <h5 className="card-title">In Progress</h5>}
-                        <p className="card-text">{bug.description}</p>
-
-
-                        <div className="mt-auto">
-                            {bug.username && <h5>Assigned to : {bug.username.username}</h5>}
-                            {bug.deadline && <h6>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h6>}
-                            {!bug.finished && <button type="button" onClick={() => this.handleShow(true, bug._id)} className="btn btn-info">Edit</button>}<br />
-                            {!bug.finished && <button type="button" onClick={() => this.props.finishBug(bug._id)} className="btn btn-info" style={{ marginTop: "3%" }}>Finish</button>}
                         </div>
+                        <div className="card-body d-flex flex-column">
+                            <h5 className="card-title">{bug.priority}</h5>
+                            {bug.finished ? <h5 className="card-title">Completed</h5> : <h5 className="card-title">In Progress</h5>}
+                            <p className="card-text">{bug.description}</p>
 
+
+                            <div className="mt-auto">
+                                {bug.username && <h5>Assigned to : {bug.username.username}</h5>}
+                                {bug.deadline && <h6>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h6>}
+                                {!bug.finished && <button type="button" onClick={() => this.handleShow(true, bug._id)} className="btn btn-info">Edit</button>}<br />
+                                {!bug.finished && <button type="button" onClick={() => this.props.finishBug(bug._id)} className="btn btn-info" style={{ marginTop: "3%" }}>Finish</button>}
+                            </div>
+
+                        </div>
                     </div>
-                </div>
-            )
-        })
+                )
+            })
+        }
 
         if (this.props.activeTab) {
             bugItems = this.props.bugs.items.filter(bug => bug.finished === this.props.completed).map(bug => {
@@ -135,7 +137,8 @@ const mapStateToProps = state => ({
     bugs: state.bugs,
     editbug: state.bugs.editbug,
     editmode: state.bugs.editmode,
-    users: state.users.users
+    users: state.users.users,
+    auth: state.auth
 
 })
 

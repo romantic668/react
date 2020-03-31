@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
 
     try {
         // Check for existing user
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).populate('bugs');
         if (!user) throw Error('User Does not exist');
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -38,8 +38,9 @@ router.post('/login', async (req, res) => {
             token,
             user: {
                 id: user._id,
-                name: user.username,
-                email: user.email
+                username: user.username,
+                email: user.email,
+                bugs: user.bugs
             }
         });
     } catch (e) {
@@ -56,7 +57,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
-
+    console.log(username)
     // Simple validation
     if (!username || !email || !password) {
         return res.status(400).json({ msg: 'Please enter all fields' });
@@ -75,7 +76,8 @@ router.post('/register', async (req, res) => {
         const newUser = new User({
             username,
             email,
-            password: hash
+            password: hash,
+            bugs: []
         });
 
         const savedUser = await newUser.save();
@@ -90,11 +92,12 @@ router.post('/register', async (req, res) => {
             user: {
                 id: savedUser.id,
                 username: savedUser.username,
-                email: savedUser.email
+                email: savedUser.email,
+                bugs: savedUser.bugs
             }
         });
     } catch (e) {
-        res.status(400).json({ error: e.message });
+        res.status(400).json({ msg: e.message });
     }
 });
 
@@ -106,7 +109,8 @@ router.post('/register', async (req, res) => {
 
 router.get('/user', auth, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password');
+        const user = await User.findById(req.user.id).select('-password').populate('bugs')
+            ;
         if (!user) throw Error('User Does not exist');
         res.json(user);
     } catch (e) {

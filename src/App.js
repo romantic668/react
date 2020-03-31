@@ -3,11 +3,11 @@ import './App.css';
 import Header from './components/Header'
 import Profile from './components/Profile'
 import SignIn from './components/auth/SignIn'
-import SignUp from './components/auth/SignUp'
+import Logout from './components/auth/Logout'
+
 import Body from './components/Body'
 import { Provider } from 'react-redux'
 import store from './store';
-import { loadUser } from './actions/authActions'
 import { BrowserRouter as Router, Link, NavLink, Redirect, Prompt, Switch } from 'react-router-dom';
 const Route = require("react-router-dom").Route;
 
@@ -21,10 +21,6 @@ class App extends React.Component {
       activeTab: JSON.parse(localStorage.getItem("activeTab")) || 0
     };
     this.handleSelect = this.handleSelect.bind(this);
-  }
-
-  componentDidMount() {
-    store.dispatch(loadUser())
   }
 
 
@@ -55,7 +51,7 @@ class App extends React.Component {
 
           </Link>
         </li>
-        <li ><a id="log_out" href="/login" aria-expanded="true" className="navbar-right"><i className="fas fa-sign-out-alt"></i> Logout</a></li>
+        <Logout />
       </ul>
     </nav>);
 
@@ -68,7 +64,7 @@ class App extends React.Component {
 
             <Switch>
               <Route path="/(|home|login|logout)/" exact>
-                <SignIn />
+                <SignIn activeTab={this.state.activeTab} handleSelect={this.handleSelect} />
               </Route>
               <Route path="/profile">
                 {navBar}

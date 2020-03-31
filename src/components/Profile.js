@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Bugs from './Bugs'
 import { Button } from 'react-bootstrap';
 import MyModal from './MyModal'
 import { CREATE_MODE } from '../actions/types';
 import { connect } from 'react-redux';
+import store from '../store';
+import { loadUser } from '../actions/authActions';
+
+
+
 
 
 function Profile(props) {
@@ -15,11 +20,19 @@ function Profile(props) {
         props.enableCreateMode()
     };
 
+    useEffect(() => {
+        store.dispatch(loadUser());
+    }, [props.bugs]);
+
+
+
     return (
         <div id="profile">
 
             <div className="jumbotron">
-                <h1 className="display-3">Hello, world!</h1>
+                {props.auth && props.auth.user ? <h1 className="display-3">Welcome {props.auth.user.username} </h1> : ''}
+
+
                 <p className="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
                 <hr className="my-4" />
                 <p>Bugs are sorted by deadline. Colors are given based on their priority.</p>
@@ -52,6 +65,11 @@ function Profile(props) {
     )
 }
 
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    bugs: state.bugs
+});
+
 
 const mapDispatchToProps = dispatch => ({
     enableCreateMode: () => dispatch({ type: CREATE_MODE }),
@@ -63,4 +81,4 @@ const mapDispatchToProps = dispatch => ({
 
 
 
-export default connect(null, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
