@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Bugs from './Bugs'
 import { Button } from 'react-bootstrap';
+import ProgressBar from 'react-bootstrap/ProgressBar'
 import MyModal from './MyModal'
 import { CREATE_MODE } from '../actions/types';
 import { connect } from 'react-redux';
@@ -14,6 +15,9 @@ import { loadUser } from '../actions/authActions';
 function Profile(props) {
 
     const [show, setShow] = useState(false);
+    const [complete, setComplete] = useState('');
+    const [togo, setTogo] = useState('');
+
 
     const handleShow = () => {
         setShow(true)
@@ -22,7 +26,19 @@ function Profile(props) {
 
     useEffect(() => {
         store.dispatch(loadUser());
+        if (props.auth && props.auth.user) {
+            var count = 0;
+            for (var i = 0; i < props.auth.user.bugs.length; ++i) {
+                if (props.auth.user.bugs[i].finished === true)
+                    count++;
+            }
+            setComplete(count);
+            setTogo(props.auth.user.bugs.length - count);
+        }
+
     }, [props.bugs]);
+
+
 
 
 
@@ -34,8 +50,8 @@ function Profile(props) {
                         {props.auth && props.auth.user ? <h1 className="display-3">Welcome {props.auth.user.username} </h1> : ''}
 
 
-                        <p className="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                        <hr className="my-4" />
+                        <p className="lead">You have resolved {complete} bugs, {togo} to go. Keep it up!</p>
+                        <ProgressBar variant="success" animated now={complete / (complete + togo) * 100} />
                         <p>Bugs are sorted by deadline. Colors are given based on their priority.</p>
                         <p className="lead">
                             <Button variant="primary" onClick={handleShow} type="button" className="btn btn-primary btn-lg btn-block" style={{ fontSize: '100%' }}>Report New Issue</Button>
