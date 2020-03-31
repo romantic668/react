@@ -154,10 +154,7 @@ function SignIn(props) {
                         onChange={handleChangePassword}
 
                     />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
+
                     <Button
                         type="submit"
                         fullWidth

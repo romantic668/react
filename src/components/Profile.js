@@ -28,30 +28,37 @@ function Profile(props) {
 
     return (
         <div id="profile">
-
-            <div className="jumbotron">
-                {props.auth && props.auth.user ? <h1 className="display-3">Welcome {props.auth.user.username} </h1> : ''}
-
-
-                <p className="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                <hr className="my-4" />
-                <p>Bugs are sorted by deadline. Colors are given based on their priority.</p>
-                <p className="lead">
-                    <Button variant="primary" onClick={handleShow} type="button" className="btn btn-primary btn-lg btn-block" style={{ fontSize: '100%' }}>Report New Issue</Button>
-                </p>
-            </div>
-            <h3 className="display-5">Issues Assigned To You</h3>
-            <div className="container">
-                <div className="row">
-                    <Bugs />
+            {props.auth.isAuthenticated ?
+                <div>
+                    <div className="jumbotron">
+                        {props.auth && props.auth.user ? <h1 className="display-3">Welcome {props.auth.user.username} </h1> : ''}
 
 
-                </div>
-            </div>
-            <MyModal
-                show={show}
-                onHide={() => setShow(false)}
-            />
+                        <p className="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                        <hr className="my-4" />
+                        <p>Bugs are sorted by deadline. Colors are given based on their priority.</p>
+                        <p className="lead">
+                            <Button variant="primary" onClick={handleShow} type="button" className="btn btn-primary btn-lg btn-block" style={{ fontSize: '100%' }}>Report New Issue</Button>
+                        </p>
+                    </div>
+                    <h3 className="display-5">Issues Assigned To You</h3>
+                    <div className="container">
+                        <div className="row">
+                            <Bugs />
+
+
+                        </div>
+                    </div>
+                    <MyModal
+                        show={show}
+                        onHide={() => setShow(false)}
+                    />
+                </div> : props.auth.isLoading ?
+                    <h1 >Loading </h1>
+                    :
+                    <h1 >Please log in </h1>
+            }
+
 
 
 
