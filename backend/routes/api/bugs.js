@@ -66,6 +66,7 @@ router.route('/:id').put((req, res) => {
             bug.priority = req.body.priority;
             bug.deadline = req.body.deadline;
 
+
             bug.save()
                 .then(bug => res.json(bug))
                 .catch(err => res.status(400).json('Error: ' + err));

@@ -17,19 +17,23 @@ export function fetchBugs() {
     }
 }
 
-export function fetchBug(id) {
-    console.log(id)
-    return function (dispatch) {
-        fetch('http://localhost:5000/api/bugs/' + id)
-            .then(res => res.json())
-            .then(bug => dispatch({
+
+export const fetchBug = (id) => (
+    dispatch,
+    getState
+) => {
+    axios
+        .get(`http://localhost:5000/api/bugs/${id}`, tokenConfig(getState))
+        .then(res =>
+            dispatch({
                 type: FETCH_BUG,
-                payload: bug
-            })).catch(err =>
-                dispatch(returnErrors(err.response.data, err.response.status))
-            );
-    }
-}
+                payload: res.data
+            })
+        )
+        .catch(err =>
+            dispatch(returnErrors(err.response.data, err.response.status))
+        );
+};
 
 
 export const createBug = (bug) => (
@@ -49,48 +53,61 @@ export const createBug = (bug) => (
         );
 };
 
-export const editBug = bug => (dispatch, getState) => {
-    console.log(bug)
-    fetch('http://localhost:5000/api/bugs/' + bug.id, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bug),
-    })
-        .then((response) => response.json())
-        .then((bug) => dispatch({
-            type: EDIT_BUG,
-            payload: bug
-        }))
-
-}
-
-export const finishBug = id => (dispatch, getState) => {
-    fetch('http://localhost:5000/api/bugs/finish/' + id, {
-        method: 'PUT',
-    })
-        .then((response) => response.json())
-        .then((bug) => dispatch({
-            type: FINISH_BUG,
-            payload: bug
-        }))
-
-}
-
-export const deleteBug = id => (dispatch, getState) => {
-    fetch('http://localhost:5000/api/bugs/' + id, {
-        method: 'DELETE',
+export const editBug = (bug) => (
+    dispatch,
+    getState
+) => {
+    axios
+        .put(`http://localhost:5000/api/bugs/${bug.id}`, bug, tokenConfig(getState))
+        .then(res =>
+            dispatch({
+                type: EDIT_BUG,
+                payload: res.data
+            })
+        )
+        .catch(err =>
+            dispatch(returnErrors(err.response.data, err.response.status))
+        );
+};
 
 
-    })
-        .then((response) => response.json())
-        .then((bug) => dispatch({
-            type: DELETE_BUG,
-            payload: bug
-        }))
+export const finishBug = (id) => (
+    dispatch,
+    getState
+) => {
+    console.log(id)
+    axios
+        .put('http://localhost:5000/api/bugs/finish/' + id, null, tokenConfig(getState))
+        .then(res =>
+            dispatch({
+                type: FINISH_BUG,
+                payload: res.data
+            })
+        )
+        .catch(err =>
+            dispatch(returnErrors(err.response.data, err.response.status))
+        );
+};
 
-}
+
+
+export const deleteBug = (id) => (
+    dispatch,
+    getState
+) => {
+    axios
+        .delete('http://localhost:5000/api/bugs/' + id, tokenConfig(getState))
+        .then(res =>
+            dispatch({
+                type: DELETE_BUG,
+                payload: res.data
+            })
+        )
+        .catch(err =>
+            dispatch(returnErrors(err.response.data, err.response.status))
+        );
+};
+
 
 
 
