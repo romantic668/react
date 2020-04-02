@@ -42,7 +42,6 @@ export const register = ({ username, email, password }) => (
       'Content-Type': 'application/json'
     }
   };
-  console.log(username)
   // Request body
   const body = JSON.stringify({ username, email, password });
 

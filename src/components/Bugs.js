@@ -1,10 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { fetchBugs, fetchBug, finishBug, deleteBug } from '../actions/bugActions'
+import { fetchBugs, fetchBug, finishBug, deleteBug, editBug } from '../actions/bugActions'
 import { fetchUsers } from '../actions/userActions'
 
 import MyModal from './MyModal'
 import { EDIT_MODE } from '../actions/types';
+import io from 'socket.io-client';
+const socket = io('http://localhost:5000');
 
 
 
@@ -19,22 +21,43 @@ class Bugs extends React.Component {
     }
 
     componentDidMount() {
+
+        socket.on("createBug", () => {
+            this.props.fetchBugs();
+        });
+
+        socket.on("editBug", (bug) => {
+            this.props.editBug(bug);
+
+        });
+
+        socket.on("finishBug", (id) => {
+            this.props.finishBug(id);
+
+        });
+
+        socket.on('deleteBug', id => {
+            this.props.deleteBug(id)
+            this.props.fetchBugs();
+
+        })
+
         this.props.fetchBugs();
         this.props.fetchUsers();
 
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.props.bugs)
-        console.log(prevProps.bugs)
+
 
         if (JSON.stringify(this.props.bugs) !== JSON.stringify(prevProps.bugs)) {
             this.props.fetchBugs();
+
+
         }
     }
 
     handleShow(bool, id) {
-        console.log(id)
         this.props.enbaleEditMode();
         this.props.fetchBug(id);
         this.setState({
@@ -46,6 +69,13 @@ class Bugs extends React.Component {
         this.setState({
             show: bool
         })
+    }
+
+    handleDelete(id) {
+        socket.emit("deleteBug", id)
+    }
+    handleFinish(id) {
+        socket.emit("finishBug", id)
     }
 
     render() {
@@ -61,7 +91,7 @@ class Bugs extends React.Component {
                 return (
                     <div className={color} key={bug._id}>
                         <div className="card-header">
-                            <button onClick={() => this.props.deleteBug(bug._id)} type="button" className="close" aria-label="Close">
+                            <button onClick={() => this.handleDelete(bug._id)} type="button" className="close" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <div><h4>{bug.title}</h4></div>
@@ -74,16 +104,16 @@ class Bugs extends React.Component {
 
 
                             <div className="mt-auto">
-                                {bug.username && <h5>Assigned to : {bug.username.username}</h5>}
+                                {bug.username && <h5>Assigned to : {this.props.auth.user.username}</h5>}
                                 {bug.deadline && <h6>Deadline : {new Date(bug.deadline).toDateString("yyyy-MM-dd")}</h6>}
                                 {!bug.finished && <button type="button" onClick={() => this.handleShow(true, bug._id)} className="btn btn-info">Edit</button>}<br />
-                                {!bug.finished && <button type="button" onClick={() => this.props.finishBug(bug._id)} className="btn btn-info" style={{ marginTop: "3%" }}>Finish</button>}
+                                {!bug.finished && <button type="button" onClick={() => this.handleFinish(bug._id)} className="btn btn-info" style={{ marginTop: "3%" }}>Finish</button>}
                             </div>
 
                         </div>
                     </div>
                 )
-            })
+            });
         }
 
         if (this.props.activeTab) {
@@ -148,7 +178,9 @@ const mapDispatchToProps = dispatch => ({
     fetchBugs: () => dispatch(fetchBugs()),
     finishBug: (id) => dispatch(finishBug(id)),
     deleteBug: (id) => dispatch(deleteBug(id)),
-    fetchUsers: () => dispatch(fetchUsers())
+    fetchUsers: () => dispatch(fetchUsers()),
+    editBug: (bug) => dispatch(editBug(bug)),
+
 
 
 

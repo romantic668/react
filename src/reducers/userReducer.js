@@ -1,4 +1,4 @@
-import { FETCH_USERS, NEW_USER } from '../actions/types';
+import { FETCH_USERS } from '../actions/types';
 
 const initialState = {
     users: [],

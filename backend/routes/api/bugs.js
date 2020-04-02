@@ -77,21 +77,30 @@ router.route('/:id').put((req, res) => {
 
 });
 
-router.route('/finish/:id').put((req, res) => {
-    Bug.findById(req.params.id)
-        .then(bug => {
+router.put('/finish/:id', async (req, res) => {
 
-            bug.finished = true;
+    try {
+        const bug = await Bug.findById(req.params.id);
+        if (!bug) throw Error('Something went wrong finding the bug');
 
-            bug.save()
-                .then(bug => res.json(bug))
-                .catch(err => res.status(400).json('Error: ' + err));
+        bug.finished = true;
+
+        const newBug = await bug.save();
+        if (!newBug) throw Error('Something went wrong saving the item');
+
+        res.status(200).json(bug);
 
 
-        })
-        .catch(err => res.status(400).json('Error: ' + err));
+    } catch (e) {
+        res.status(400).json({ msg: e.message });
+    }
 
 });
+
+
+
+
+
 
 router.route('/:id').delete((req, res) => {
     Bug.findByIdAndRemove(req.params.id)

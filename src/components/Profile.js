@@ -12,6 +12,7 @@ import { loadUser } from '../actions/authActions';
 
 
 
+
 function Profile(props) {
 
     const [show, setShow] = useState(false);
@@ -20,11 +21,15 @@ function Profile(props) {
 
 
     const handleShow = () => {
-        setShow(true)
-        props.enableCreateMode()
+        setShow(true);
+        props.enableCreateMode();
+
+
+
     };
 
     useEffect(() => {
+
         store.dispatch(loadUser());
         if (props.auth && props.auth.user) {
             var count = 0;

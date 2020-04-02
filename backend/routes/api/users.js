@@ -25,7 +25,6 @@ router.route('/').post((req, res) => {
 router.route('/:id/bugs').post((req, res) => {
     const userId = req.params.id;
     const bugId = req.body.bugId;
-    console.log(req.body)
     User.addBug(userId, bugId)
         .then((user) => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err));;

@@ -75,7 +75,6 @@ export const finishBug = (id) => (
     dispatch,
     getState
 ) => {
-    console.log(id)
     axios
         .put('http://localhost:5000/api/bugs/finish/' + id, null, tokenConfig(getState))
         .then(res =>

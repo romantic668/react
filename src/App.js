@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import Header from './components/Header'
 import Profile from './components/Profile'
 import SignIn from './components/auth/SignIn'
 import Logout from './components/auth/Logout'
@@ -8,7 +7,7 @@ import Logout from './components/auth/Logout'
 import Body from './components/Body'
 import { Provider } from 'react-redux'
 import store from './store';
-import { BrowserRouter as Router, Link, NavLink, Redirect, Prompt, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Switch } from 'react-router-dom';
 const Route = require("react-router-dom").Route;
 
 
@@ -26,7 +25,6 @@ class App extends React.Component {
 
 
   handleSelect(index) {
-    console.log(index)
     this.setState({
       activeTab: index
     });

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Profile from './Profile'
 import Bugs from './Bugs'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { SHOW_COMPLETE, SHOW_IN_PROGRESS } from '../actions/types';

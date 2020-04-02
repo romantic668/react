@@ -57,7 +57,6 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
-    console.log(username)
     // Simple validation
     if (!username || !email || !password) {
         return res.status(400).json({ msg: 'Please enter all fields' });
@@ -109,7 +108,8 @@ router.post('/register', async (req, res) => {
 
 router.get('/user', auth, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password').populate('bugs')
+        const user = await User.findById(req.user.id).select('-password').populate({ path: 'bugs', options: { sort: { deadline: 1 } } })
+
             ;
         if (!user) throw Error('User Does not exist');
         res.json(user);

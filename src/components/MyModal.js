@@ -3,6 +3,8 @@ import { InputGroup, Modal, FormControl, Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createBug, editBug } from '../actions/bugActions'
 import { DateTime } from 'react-datetime-bootstrap';
+import io from 'socket.io-client';
+const socket = io('http://localhost:5000');
 
 
 class MyModal extends Component {
@@ -31,7 +33,6 @@ class MyModal extends Component {
     this.setState({
       deadline: deadline
     })
-    console.log(deadline)
   }
 
   handleSubmit(event) {
@@ -63,11 +64,13 @@ class MyModal extends Component {
 
       };
       this.setState({ title: '', description: '' })
-      console.log(bug)
-      if (this.props.editmode)
-        this.props.editBug(editBug)
-      else
+      if (this.props.editmode) {
+        socket.emit("editBug", editBug);
+      }
+      else {
         this.props.createBug(bug);
+        socket.emit("createBug", bug);
+      }
     }
     this.props.onHide();
 
@@ -160,7 +163,7 @@ class MyModal extends Component {
               <h5>
                 <Form.Label>Assign it to</Form.Label>
                 <Form.Control required as="select"
-                  required
+
                   name="username"
                   onChange={this.onChange}
                   value={this.state.username}  >
@@ -186,6 +189,7 @@ class MyModal extends Component {
 }
 
 const mapStateToProps = state => ({
+  bugs: state.bugs,
   editbug: state.bugs.editbug,
   editmode: state.bugs.editmode,
   users: state.users.users
