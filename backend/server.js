@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const socketIo = require("socket.io");
+const path = require('path');
 
 require('dotenv').config();
 
@@ -31,6 +32,14 @@ app.use('/api/bugs', bugsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 
+// serve static assest if in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('../build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
+    })
+}
 
 const server = app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
