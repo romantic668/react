@@ -1,0 +1,46 @@
+version: "3"
+services:
+    client:
+        container_name: bug_tracker
+        build: ./
+        restart: always
+        ports:
+            - "3000:3000"
+        working_dir: /app
+        volumes:
+            - ./:/app
+        entrypoint: ["npm", "start"]
+        links:
+            - api
+        networks:
+            - webappnetwork
+    api:
+        container_name: bug_tracker_api
+        build: ./backend
+        restart: always
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./backend:/backend
+            - /backend/node_modules
+        depends_on:
+            - mongodb
+        networks:
+            - webappnetwork
+    mongodb:
+        image: mongo
+        restart: always
+        container_name: mongodb
+        volumes:
+            - "mongodbdata:/data/db"
+        ports:
+            - 27017:27017
+        networks:
+            - webappnetwork
+networks:
+    webappnetwork:
+        driver: bridge
+
+volumes:
+    mongodbdata:
+        external: true
