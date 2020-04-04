@@ -36,7 +36,7 @@
     "server-install": "npm install --prefix bankend",
     "server": "npm run server --prefix backend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "npm install && npm run build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {
