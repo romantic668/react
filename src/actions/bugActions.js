@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export function fetchBugs() {
     return function (dispatch) {
-        fetch('http://localhost:5000/api/bugs')
+        fetch('/api/bugs')
             .then(res => res.json())
             .then(bugs => dispatch({
                 type: FETCH_BUGS,
@@ -23,7 +23,7 @@ export const fetchBug = (id) => (
     getState
 ) => {
     axios
-        .get(`http://localhost:5000/api/bugs/${id}`, tokenConfig(getState))
+        .get(`/api/bugs/${id}`, tokenConfig(getState))
         .then(res =>
             dispatch({
                 type: FETCH_BUG,
@@ -41,7 +41,7 @@ export const createBug = (bug) => (
     getState
 ) => {
     axios
-        .post('http://localhost:5000/api/bugs', bug, tokenConfig(getState))
+        .post('/api/bugs', bug, tokenConfig(getState))
         .then(res =>
             dispatch({
                 type: NEW_BUG,
@@ -58,7 +58,7 @@ export const editBug = (bug) => (
     getState
 ) => {
     axios
-        .put(`http://localhost:5000/api/bugs/${bug.id}`, bug, tokenConfig(getState))
+        .put(`/api/bugs/${bug.id}`, bug, tokenConfig(getState))
         .then(res =>
             dispatch({
                 type: EDIT_BUG,
@@ -76,7 +76,7 @@ export const finishBug = (id) => (
     getState
 ) => {
     axios
-        .put('http://localhost:5000/api/bugs/finish/' + id, null, tokenConfig(getState))
+        .put('/api/bugs/finish/' + id, null, tokenConfig(getState))
         .then(res =>
             dispatch({
                 type: FINISH_BUG,
@@ -95,7 +95,7 @@ export const deleteBug = (id) => (
     getState
 ) => {
     axios
-        .delete('http://localhost:5000/api/bugs/' + id, tokenConfig(getState))
+        .delete('/api/bugs/' + id, tokenConfig(getState))
         .then(res =>
             dispatch({
                 type: DELETE_BUG,
