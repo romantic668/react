@@ -7,13 +7,13 @@ import MyModal from './MyModal'
 import { EDIT_MODE } from '../actions/types';
 import io from 'socket.io-client';
 
-const port = process.env.PORT || 5000;
 let socket
 if (process.env.NODE_ENV === 'production') {
-    socket = io('https://fathomless-citadel-21115.herokuapp.com/')
-}
-socket = io('http://localhost:5000');
+    socket = io('https://fathomless-citadel-21115.herokuapp.com')
+} else {
+    socket = io('http://localhost:5000');
 
+}
 
 
 

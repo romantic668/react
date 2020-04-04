@@ -9,8 +9,10 @@ const port = process.env.PORT || 5000;
 let socket
 if (process.env.NODE_ENV === 'production') {
   socket = io('https://fathomless-citadel-21115.herokuapp.com')
+} else {
+  socket = io('http://localhost:5000');
+
 }
-socket = io('http://localhost:5000');
 
 
 class MyModal extends Component {
