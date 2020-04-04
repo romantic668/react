@@ -36,7 +36,7 @@
     "server-install": "npm install --prefix bankend",
     "server": "npm run server --prefix backend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build && npm run server-install && npm start --prefix backend"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build && npm run server-install"
   },
   "eslintConfig": {
     "extends": "react-app"
