@@ -47,6 +47,7 @@ const server = app.listen(port, () => {
 
 const io = socketIo(server);
 
+io.set('origins', '*:*');
 //Setting up a socket with the namespace "connection" for new sockets
 io.on("connection", socket => {
     console.log("New client connected");
