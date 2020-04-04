@@ -4,7 +4,13 @@ import { connect } from 'react-redux';
 import { createBug, editBug } from '../actions/bugActions'
 import { DateTime } from 'react-datetime-bootstrap';
 import io from 'socket.io-client';
-const socket = io('http://localhost:5000');
+
+const port = process.env.PORT || 5000;
+let socket
+if (process.env.NODE_ENV === 'production') {
+  socket = io(`https://fathomless-citadel-21115.herokuapp.com:${port}`)
+}
+socket = io('http://localhost:5000');
 
 
 class MyModal extends Component {
