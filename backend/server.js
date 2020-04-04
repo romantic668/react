@@ -33,7 +33,13 @@ app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 
 // serve static assest if in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('../build'));
 
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
+    })
+}
 
 const server = app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
@@ -62,11 +68,3 @@ io.on("connection", socket => {
     //A special namespace "disconnect" for when a client disconnects
     socket.on("disconnect", () => console.log("Client disconnected"));
 });
-
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('../build'));
-
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
-    })
-}
