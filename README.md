@@ -4,7 +4,7 @@
 
 ## Available Scripts
 
-In the project directory, you can run:
+To download and run the project, follow these 3 steps:
 
 ### `npm install`
 
@@ -18,13 +18,9 @@ Install dependecies for the server
 
 Run the client & server with concurrently
 
-### `npm run server`
-
-Run the Express server only
-
-### `npm run client`
-
-Run the React client only
+```
+Server runs on http://localhost:5000 and client on http://localhost:3000. Go to http://localhost:3000 for access.
+```
 
 ## Deployment
 
