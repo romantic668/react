@@ -1,6 +1,6 @@
 # Bugtracker 
 
-> This project was built using the MERN stack with socket.io real time implementation.
+> This project was built using the MERN stack with socket.io real time implementation. Bug tracker seeks to solve a real world problem by having a clear-cut business bottom line in mind. The system ensures dev teams are kept on track of their progress, so that a functional project can be delivered on time and within budget.
 
 ## Available Scripts
 
