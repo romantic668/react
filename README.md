@@ -4,19 +4,15 @@
 
 ## Available Scripts
 
-To download and run the project, follow these 3 steps:
+To download and run the project, use this single command:
 
-### `npm install`
+### `npm run stack-install`
 
-Install dependecies for the client
-
-### `npm run server-install`
-
-Install dependecies for the server
+First time running, use above command to install and run the project
 
 ### `npm run dev`
 
-Run the client & server with concurrently
+On subsequent runs, use above command to run the app without installing
 
 ```
 Server runs on http://localhost:5000 and client on http://localhost:3000. Go to http://localhost:3000 for access.
