@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 
 let socket
 if (process.env.NODE_ENV === 'production') {
-    socket = io('https://fathomless-citadel-21115.herokuapp.com')
+    socket = io('https://the-bug-tracker.herokuapp.com/')
 } else {
     socket = io('http://localhost:5000');
 
