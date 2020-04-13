@@ -24,4 +24,4 @@ Server runs on http://localhost:5000 and client on http://localhost:3000. Go to 
 
 ## Deployment
 
-Deployment of this project can be accessed at [Heroku](https://fathomless-citadel-21115.herokuapp.com/)
+Deployment of this project can be accessed at [Heroku](https://the-bug-tracker.herokuapp.com/)
