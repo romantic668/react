@@ -28,7 +28,7 @@ function Copyright() {
             {'Copyright © '}
             <Link color="inherit" href="https://romantic668.github.io/">
                 Lin Cong
-      </Link>{' '}
+            </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
@@ -121,7 +121,7 @@ function SignIn(props) {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Welcom To Bug Tracker
-                    </Typography>
+                </Typography>
                 {msg ? <Alert severity="error">{msg}</Alert> : null}
                 <form className={classes.form} onSubmit={handleOnSubmit} noValidate>
                     <TextField
@@ -162,7 +162,7 @@ function SignIn(props) {
                         onClick={props.handleSelect.bind(this, 0)}
                     >
                         Sign In
-                        </Button>
+                    </Button>
                     <Grid container>
                         <Grid item xs>
                             <Link href="/bugs" variant="body2" onClick={props.handleSelect.bind(this, 1)}>
