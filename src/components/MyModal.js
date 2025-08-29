@@ -5,13 +5,19 @@ import { createBug, editBug } from '../actions/bugActions'
 import { DateTime } from 'react-datetime-bootstrap';
 import io from 'socket.io-client';
 
-let socket
+let socket;
 if (process.env.NODE_ENV === 'production') {
-  socket = io('https://the-bug-tracker.herokuapp.com/')
+  socket = io('https://bugtracker-api-lin.fly.dev', {
+    withCredentials: true,
+    transports: ['websocket']
+  });
 } else {
-  socket = io('http://localhost:5000');
-
+  socket = io('http://localhost:5000', {
+    withCredentials: true,
+    transports: ['websocket']
+  });
 }
+
 
 
 class MyModal extends Component {

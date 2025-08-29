@@ -7,13 +7,19 @@ import MyModal from './MyModal'
 import { EDIT_MODE } from '../actions/types';
 import io from 'socket.io-client';
 
-let socket
+let socket;
 if (process.env.NODE_ENV === 'production') {
-    socket = io('https://the-bug-tracker.herokuapp.com/')
+    socket = io('https://bugtracker-api-lin.fly.dev', {
+        withCredentials: true,
+        transports: ['websocket']
+    });
 } else {
-    socket = io('http://localhost:5000');
-
+    socket = io('http://localhost:5000', {
+        withCredentials: true,
+        transports: ['websocket']
+    });
 }
+
 
 
 
