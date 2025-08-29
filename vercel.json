@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://bugtracker-api-lin.fly.dev/api/:path*"
+        },
+        {
+            "source": "/socket.io/:path*",
+            "destination": "https://bugtracker-api-lin.fly.dev/socket.io/:path*"
+        }
+    ]
+}
