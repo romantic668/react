@@ -10,39 +10,47 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const app = express();
 const port = process.env.PORT || 5000;
 
-/* -------------------- CORS 配置（关键） -------------------- */
-// 允许的来源：用环境变量 CORS_ORIGINS 配置，逗号分隔。
-// 本地开发和你的 Vercel 域名都要写进去。
+/* -------------------- CORS 配置 -------------------- */
+// 从环境变量读取白名单，逗号分隔
 const rawOrigins =
     process.env.CORS_ORIGINS ||
-    'http://localhost:3000,https://https://bugtracker-livid.vercel.app/';
-const allowedOrigins = rawOrigins
+    'http://localhost:3000,https://bugtracker-livid.vercel.app';
+
+const listFromEnv = rawOrigins
     .split(',')
     .map(s => s.trim())
     .filter(Boolean);
 
+// 内置允许规则：localhost + 环境变量 + *.vercel.app 动态预览
+const allowedOrigins = [
+    ...listFromEnv,
+    /\.vercel\.app$/i, // ✅ 允许所有 Vercel 预览域名
+];
+
+function isAllowed(origin) {
+    return allowedOrigins.some(o =>
+        o instanceof RegExp ? o.test(origin) : o === origin
+    );
+}
+
 const corsOptions = {
     origin(origin, cb) {
-        // 无 origin（如 curl / server-side）也放行
-        if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-        return cb(new Error('Not allowed by CORS'));
+        if (!origin) return cb(null, true); // 没有 origin（curl / healthcheck）放行
+        if (isAllowed(origin)) return cb(null, true);
+        return cb(new Error('Not allowed by CORS: ' + origin));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     exposedHeaders: ['Authorization'],
-    maxAge: 86400, // 预检缓存一天
+    maxAge: 86400,
 };
 
 app.use(cors(corsOptions));
-// 显式处理预检
 app.options('*', cors(corsOptions));
-
-// 若你用到 secure cookie，Fly 反代下需要这行
 app.set('trust proxy', 1);
-
 app.use(express.json());
-/* -------------------------------------------------------- */
+/* --------------------------------------------------- */
 
 // --- MongoDB 连接 ---
 const uri = process.env.ATLAS_URI;
@@ -68,7 +76,7 @@ app.use('/api/bugs', bugsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 
-// 生产环境托管前端 build（可选）
+// 生产环境托管前端 build
 if (process.env.NODE_ENV === 'production') {
     const buildPath = path.join(__dirname, '../build');
     app.use('/', express.static(buildPath));
@@ -85,7 +93,11 @@ const server = app.listen(port, () => {
 // Socket.IO，CORS 同步
 const io = socketIo(server, {
     cors: {
-        origin: allowedOrigins,
+        origin(origin, cb) {
+            if (!origin) return cb(null, true);
+            if (isAllowed(origin)) return cb(null, true);
+            cb(new Error('Not allowed by CORS (socket): ' + origin));
+        },
         methods: ['GET', 'POST'],
         credentials: true,
     },
@@ -93,12 +105,10 @@ const io = socketIo(server, {
 
 io.on('connection', socket => {
     console.log('🔌 New client connected');
-
     socket.on('createBug', () => io.sockets.emit('createBug'));
     socket.on('finishBug', id => io.sockets.emit('finishBug', id));
     socket.on('editBug', bug => io.sockets.emit('editBug', bug));
     socket.on('deleteBug', id => io.sockets.emit('deleteBug', id));
-
     socket.on('disconnect', () => console.log('🔌 Client disconnected'));
 });
 
