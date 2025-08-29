@@ -6,16 +6,17 @@ primary_region = "sea"
 
 [env]
   NODE_ENV = "production"
-  PORT = "5000"            # 显式告诉进程用 5000
+  PORT = "5000"                 # 进程监听的端口
 
-[[services]]
-  internal_port = 5000     # 跟进程端口一致
-  protocol = "tcp"
+[http_service]
+  internal_port = 5000          # 与上面的 PORT 一致
+  force_https = true
+  auto_stop_machines = true     # 🟢 闲置自动停机
+  auto_start_machines = true    # 🟢 有请求自动启动
+  min_machines_running = 0      # 🟢 允许 0 台（最省钱）
+  processes = ["app"]
 
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
+[[vm]]
+  memory = "256mb"              # 够用再说；不够再升 512mb
+  cpu_kind = "shared"
+  cpus = 1
